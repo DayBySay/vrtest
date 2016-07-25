@@ -4,7 +4,7 @@ using VRStandardAssets.Utils;
 
 public class AdPlaneController : VRInteractiveItem {
 
-	const string MOVIE_TEXTURE = "Video/AQUARIUS";
+	const string MOVIE_TEXTURE = "Videos/AQUARIUS";
 	const string BANNER_TEXTURE = "Materials/AQUARIUS";
 	private MovieTexture movieTexture;
 	private Texture bannerTexture;
@@ -12,37 +12,42 @@ public class AdPlaneController : VRInteractiveItem {
 	private bool startPlaying = false;
 	public GameObject progress;
 
+	void OnStart () {
+		this.videoPlayIfPossible ();
+	}
+
 	void Awake () {
 		m_InteractiveItem = GetComponent<VRInteractiveItem> ();
 
 		this.movieTexture = Resources.Load<MovieTexture> (MOVIE_TEXTURE);
 		this.bannerTexture = Resources.Load<Texture> (BANNER_TEXTURE);
+		this.videoPlayIfPossible ();
 	}
 
 	void OnDisable () {
 		m_InteractiveItem.OnClick -= didTouchUpAd;
 	}
 
-	void OnBecameVisible () {
-		if (!this.startPlaying) {
-			this.progress.SetActive (true);
-			Invoke ("videoPlayIfPossible", 2);
-			return;
-		}
-
-		videoPlayIfPossible ();
-	}
-
-	void OnBecameInvisible () {
-		if (!this.startPlaying) {
-			this.progress.SetActive (false);
-			CancelInvoke ();
-
-			return;
-		}
-
-		videoPauseIfPossible ();
-	}
+//	void OnBecameVisible () {
+//		if (!this.startPlaying) {
+//			this.progress.SetActive (true);
+//			Invoke ("videoPlayIfPossible", 2);
+//			return;
+//		}
+//
+//		videoPlayIfPossible ();
+//	}
+//
+//	void OnBecameInvisible () {
+//		if (!this.startPlaying) {
+//			this.progress.SetActive (false);
+//			CancelInvoke ();
+//
+//			return;
+//		}
+//
+//		videoPauseIfPossible ();
+//	}
 
 	void didTouchUpAd() {
 		if (!this.startPlaying) {
@@ -67,13 +72,12 @@ public class AdPlaneController : VRInteractiveItem {
 	}
 
 	void videoPlayIfPossible() {
-		if (!this.startPlaying) {
-			this.progress.SetActive (false);
-			this.startPlaying = true;
-			m_InteractiveItem.OnClick += didTouchUpAd;
-			GetComponent<Renderer> ().material.mainTexture = this.movieTexture;
-			Invoke ("showBannerTexture", this.movieTexture.duration);
-		}
+//		if (!this.startPlaying) {
+//			this.startPlaying = true;
+//			m_InteractiveItem.OnClick += didTouchUpAd;
+//			GetComponent<Renderer> ().material.mainTexture = this.movieTexture;
+//			Invoke ("showBannerTexture", this.movieTexture.duration);
+//		}
 
 		((MovieTexture)GetComponent<Renderer> ().material.mainTexture).Play ();
 	}
